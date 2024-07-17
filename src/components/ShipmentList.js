@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { shipmentData } from '../data';
+import { fetchShipments } from '../data';
 
 const ShipmentList = () => {
+  const [shipments, setShipments] = useState([]);
+
+  useEffect(() => {
+    const loadShipments = async () => {
+      const data = await fetchShipments();
+      setShipments(data);
+    };
+
+    loadShipments();
+  }, []);
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-4">Shipment List</h1>
@@ -17,16 +28,16 @@ const ShipmentList = () => {
             </tr>
           </thead>
           <tbody>
-            {shipmentData.map(item => (
-              <tr key={item.id} className="border-t border-gray-700">
+            {shipments.map(shipment => (
+              <tr key={shipment.shipmentId} className="border-t border-gray-700">
                 <td className="py-2 px-4">
-                  <Link to={`/shipments/${item.id}`} className="text-blue-400 hover:underline">
-                    {item.id}
+                  <Link to={`/shipments/${shipment.shipmentId}`} className="text-blue-400 hover:underline">
+                    {shipment.shipmentId}
                   </Link>
                 </td>
-                <td className="py-2 px-4">{item.product}</td>
-                <td className="py-2 px-4">{item.quantity}</td>
-                <td className="py-2 px-4">{item.status}</td>
+                <td className="py-2 px-4">{shipment.product}</td>
+                <td className="py-2 px-4">{shipment.quantity}</td>
+                <td className="py-2 px-4">{shipment.status}</td>
               </tr>
             ))}
           </tbody>
