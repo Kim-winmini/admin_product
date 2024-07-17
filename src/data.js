@@ -123,6 +123,49 @@ export const moveProductionToShipments = async (productionID) => {
   }
 };
 
+// Pending 상태를 Shipped로 바꾼다.
+export const updateShipmentStatusToShipped = async (shipmentId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/update_shipments_status_to_shipped`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ shipmentId, timestamp: new Date().toISOString() }),
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error updating shipment status to shipped:', error);
+    return null;
+  }
+};
+
+// SNS에 알림을 준다.
+export const publishToSNS = async (shipmentId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/publish_to_sns`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ shipmentId }),
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error publishing to SNS:', error);
+    return null;
+  }
+};
+
+
 
 
 // export const fetchOrderById = async (orderId) => {
