@@ -1,5 +1,6 @@
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
+// 목록 갱신
 export const fetchOrders = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/get_orders`);
@@ -14,6 +15,7 @@ export const fetchOrders = async () => {
   }
 };
 
+// 상태를 생산 중으로 변경
 export const moveOrderToProduction = async (orderID) => {
   try {
     const response = await fetch(`${API_BASE_URL}/update_order_status_to_in_production`, {
@@ -34,6 +36,7 @@ export const moveOrderToProduction = async (orderID) => {
   }
 };
 
+// 상태를 출고 완료로 변경
 export const moveOrderToShipped = async (orderID) => {
   try {
     const response = await fetch(`${API_BASE_URL}/update_order_status_to_shipped`, {
@@ -57,6 +60,7 @@ export const moveOrderToShipped = async (orderID) => {
   }
 };
 
+// 주문 세부 정보를 JSON형태로 SNS 게시
 export const sendOrderDetailsToSNS = async (orderID) => {
   try {
     const response = await fetch(`${API_BASE_URL}/send_order_details_to_sns`, {

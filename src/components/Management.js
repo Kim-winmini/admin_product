@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchOrders, moveOrderToProduction, moveOrderToShipped } from '../data';
 
+// 아이템 목록 조회
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
 
@@ -15,6 +16,7 @@ const OrderManagement = () => {
     loadOrders();
   }, []);
 
+  // 버튼을 통한 Status 'In Production'으로 업데이트
   const handleMoveToProduction = async (orderID) => {
     try {
       const result = await moveOrderToProduction(orderID);
@@ -35,6 +37,7 @@ const OrderManagement = () => {
     }
   };
 
+  // 버튼을 통한 Status 'Shipped'로 업데이트
   const handleMoveToShipped = async (orderID) => {
     try {
       const result = await moveOrderToShipped(orderID);
@@ -55,6 +58,7 @@ const OrderManagement = () => {
     }
   };
 
+  // 상태에 따른 버튼의 활성화, 비활성화
   const renderProductionButton = (status, orderID) => {
     if (status === 'Pending') {
       return (
@@ -88,6 +92,7 @@ const OrderManagement = () => {
     }
   };
 
+  // 상태에 따른 버튼의 활성화 비활성화
   const renderShippingButton = (status, orderID) => {
     if (status === 'Completed') {
       return (
