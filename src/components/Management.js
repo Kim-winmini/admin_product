@@ -25,7 +25,7 @@ const OrderManagement = () => {
             order.orderID === orderID ? { ...order, status: 'In Production' } : order
           )
         );
-        alert(result.message);
+        alert(result.response1.message || 'Order status updated to In Production');
       } else {
         alert('Failed to move order to production');
       }
@@ -45,7 +45,7 @@ const OrderManagement = () => {
             order.orderID === orderID ? { ...order, status: 'Shipped' } : order
           )
         );
-        alert(result.message);
+        alert(result.message || 'Order status updated to Shipped and sent to SNS');
       } else {
         alert('Failed to move order to shipped');
       }
