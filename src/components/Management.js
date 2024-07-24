@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchOrders, moveOrderToProduction, moveOrderToShipped } from '../data';
 
-// 생산 요청 목록 불러오기
-const OrderList = () => {
+const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -16,7 +15,6 @@ const OrderList = () => {
     loadOrders();
   }, []);
 
-// 버튼을 통해 In Production 상태로 변경
   const handleMoveToProduction = async (orderID) => {
     try {
       const result = await moveOrderToProduction(orderID);
@@ -37,7 +35,6 @@ const OrderList = () => {
     }
   };
 
-// 버튼을 통해 Shipped 상태로 변경
   const handleMoveToShipped = async (orderID) => {
     try {
       const result = await moveOrderToShipped(orderID);
@@ -58,47 +55,69 @@ const OrderList = () => {
     }
   };
 
-// 상태에 따른 버튼 활성화 및 비활성화
-  const renderButton = (status, orderID) => {
-    switch (status) {
-      case 'Pending':
-        return (
-          <button
-            className="font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700 text-white"
-            onClick={() => handleMoveToProduction(orderID)}
-          >
-            Start Production
-          </button>
-        );
-      case 'In Production':
-        return (
-          <button
-            className="font-bold py-2 px-4 rounded bg-gray-500 text-gray-300 cursor-not-allowed"
-            disabled
-          >
-            In Production
-          </button>
-        );
-      case 'Completed':
-        return (
-          <button
-            className="font-bold py-2 px-4 rounded bg-green-500 hover:bg-green-700 text-white"
-            onClick={() => handleMoveToShipped(orderID)}
-          >
-            Shipping
-          </button>
-        );
-      case 'Shipped':
-        return (
-          <button
-            className="font-bold py-2 px-4 rounded bg-gray-500 text-gray-300 cursor-not-allowed"
-            disabled
-          >
-            Shipped
-          </button>
-        );
-      default:
-        return null;
+  const renderProductionButton = (status, orderID) => {
+    if (status === 'Pending') {
+      return (
+        <button
+          className="font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700 text-white"
+          onClick={() => handleMoveToProduction(orderID)}
+        >
+          Start Production
+        </button>
+      );
+    } else if (status === 'In Production') {
+      return (
+        <button
+          className="font-bold py-2 px-4 rounded bg-gray-500 text-gray-300 cursor-not-allowed"
+          disabled
+        >
+          In Production
+        </button>
+      );
+    } else if (status === 'Completed' || status === 'Shipped') {
+      return (
+        <button
+          className="font-bold py-2 px-4 rounded bg-gray-500 text-gray-300 cursor-not-allowed"
+          disabled
+        >
+          Start Production
+        </button>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  const renderShippingButton = (status, orderID) => {
+    if (status === 'Completed') {
+      return (
+        <button
+          className="font-bold py-2 px-4 rounded bg-green-500 hover:bg-green-700 text-white"
+          onClick={() => handleMoveToShipped(orderID)}
+        >
+          Shipping
+        </button>
+      );
+    } else if (status === 'Shipped') {
+      return (
+        <button
+          className="font-bold py-2 px-4 rounded bg-gray-500 text-gray-300 cursor-not-allowed"
+          disabled
+        >
+          Shipped
+        </button>
+      );
+    } else if (status === 'Pending' || status === 'In Production') {
+      return (
+        <button
+          className="font-bold py-2 px-4 rounded bg-gray-500 text-gray-300 cursor-not-allowed"
+          disabled
+        >
+          Shipping
+        </button>
+      );
+    } else {
+      return null;
     }
   };
 
@@ -114,7 +133,8 @@ const OrderList = () => {
               <th className="py-2 px-4">Quantity</th>
               <th className="py-2 px-4">Status</th>
               <th className="py-2 px-4">Stamp</th>
-              <th className="py-2 px-4">Actions</th>
+              <th className="py-2 px-4">Production Actions</th>
+              <th className="py-2 px-4">Shipping Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -126,7 +146,10 @@ const OrderList = () => {
                 <td className="py-2 px-4">{order.status}</td>
                 <td className="py-2 px-4">{order.stamp}</td>
                 <td className="py-2 px-4">
-                  {renderButton(order.status, order.orderID)}
+                  {renderProductionButton(order.status, order.orderID)}
+                </td>
+                <td className="py-2 px-4">
+                  {renderShippingButton(order.status, order.orderID)}
                 </td>
               </tr>
             ))}
@@ -137,4 +160,4 @@ const OrderList = () => {
   );
 };
 
-export default OrderList;
+export default OrderManagement;
